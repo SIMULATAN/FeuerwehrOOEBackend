@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"firebase.google.com/go/v4/messaging"
-	"fmt"
 	"log"
 )
 
@@ -15,18 +14,16 @@ func InitializeMessaging() {
 	var err error
 	client, err = app.Messaging(ctx)
 	if err != nil {
-		log.Fatalf("error getting Messaging client: %v\n", err)
+		log.Fatalf("Error getting messaging client: %v\n", err)
 	}
 }
 
-func SendNotification(einsatz Einsatz) {
-	// The topic name can be optionally prefixed with "/topics/".
-	topic := "alarmierung"
+const topic = "alarmierung"
 
-	// See documentation on defining a message payload.
+func SendNotification(einsatz Einsatz) {
 	message := &messaging.Message{
 		Notification: &messaging.Notification{
-			Title: einsatz.Einsatzart + " in " + einsatz.Adresse.Ort,
+			Title: einsatz.Einsatztyp.Name + " in " + einsatz.Adresse.Ort,
 			Body:  "Alarmstufe " + einsatz.Alarmstufe.String(),
 		},
 		Topic: topic,
@@ -42,8 +39,7 @@ func SendNotification(einsatz Einsatz) {
 
 	response, err := client.Send(context.Background(), message)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println("Error sending message:", err)
 	}
-	// Response is a message ID string.
-	fmt.Println("Successfully sent message:", response)
+	log.Println("Successfully sent message:", response)
 }

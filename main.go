@@ -4,16 +4,27 @@ import (
 	"context"
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/db"
-	"fmt"
 	"google.golang.org/api/option"
 	"log"
+	"os"
+	"strconv"
 	"time"
 )
 
 var app *firebase.App
 
+var tickerTime = 60
+
 func main() {
 	ctx := context.Background()
+	var err error
+
+	if tickerTimeStr := os.Getenv("TICKER_TIME"); tickerTimeStr != "" {
+		tickerTime, err = strconv.Atoi(tickerTimeStr)
+		if err != nil {
+			log.Fatalf("error parsing ticker time: %v", err)
+		}
+	}
 
 	firebaseConfig := GetConfig()
 
@@ -25,7 +36,6 @@ func main() {
 	}
 
 	opt := option.WithCredentialsFile("serviceAccountKey.json")
-	var err error
 	app, err = firebase.NewApp(context.Background(), conf, opt)
 	if err != nil {
 		log.Fatalf("error initializing app: %v\n", err)
@@ -50,14 +60,17 @@ func runFetchThread(historyRef *db.Ref, notificationRef *db.Ref) {
 	done := make(chan bool)
 
 	go runFetch(historyRef, notificationRef, ctx)
-	ticker := time.NewTicker(5 * time.Second)
+	duration := time.Second * time.Duration(tickerTime)
+	ticker := time.NewTicker(duration)
+
+	log.Println("Starting ticker with duration", duration)
 
 	for {
 		select {
 		case <-done:
 			return
 		case t := <-ticker.C:
-			fmt.Println("Tick at", t)
+			log.Println("Tick at", t)
 			runFetch(historyRef, notificationRef, ctx)
 		}
 	}
@@ -91,11 +104,8 @@ func runFetch(historyRef *db.Ref, notificationRef *db.Ref, ctx context.Context) 
 
 	// delete all notifications from notificationsToSend if the incident is finished (the notifications value is true)
 	for key, value := range existingNotificationMap {
-		if _, ok := notificationsToSend[key]; ok {
-			fmt.Println("Found notification for", key)
-			continue
-		}
 		if _, ok := notificationsToSend[key]; !ok && value {
+			log.Println("Deleting obsolete notification for", key)
 			err = notificationRef.Child(key).Delete(ctx)
 			if err != nil {
 				log.Println("Error deleting existing notification value:", err)
@@ -113,7 +123,7 @@ func runFetch(historyRef *db.Ref, notificationRef *db.Ref, ctx context.Context) 
 	sentNotifications := make(map[string]any)
 
 	for key, value := range notificationsToSend {
-		fmt.Println("Sending notification for", key)
+		log.Println("Sending notification for", key)
 		SendNotification(value)
 		sentNotifications[key] = true
 	}

@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"sort"
 	"strconv"
@@ -102,14 +102,14 @@ func parseEinsatz(jsonString []byte) (Einsatz, error) {
 func parseEinsaetze() []Einsatz {
 	response, err := http.Get(jsonUrl)
 	if err != nil {
-		fmt.Println("Failed to get data from URL:", err)
+		log.Println("Failed to get data from URL:", err)
 		return nil
 	}
 	defer response.Body.Close()
 
 	data, err := io.ReadAll(response.Body)
 	if err != nil {
-		fmt.Println("Failed to read response body:", err)
+		log.Println("Failed to read response body:", err)
 		return nil
 	}
 
@@ -117,12 +117,12 @@ func parseEinsaetze() []Einsatz {
 	var einsaetzeMap map[string]any
 	err = json.Unmarshal(data, &einsaetzeMap)
 	if err != nil {
-		fmt.Println("Failed to parse JSON data:", err)
+		log.Println("Failed to parse JSON data:", err)
 		return nil
 	}
 
 	if einsaetzeMap["einsaetze"] == nil {
-		fmt.Println("No Einsätze found")
+		log.Println("No einsaetze object found")
 		return nil
 	}
 
@@ -134,13 +134,13 @@ func parseEinsaetze() []Einsatz {
 	for _, einsatzObject := range einsaetzeMap {
 		einsatzBytes, err := json.Marshal(einsatzObject.(map[string]any)["einsatz"].(map[string]any))
 		if err != nil {
-			fmt.Println("Failed to marshal einsatz object:", err)
+			log.Println("Failed to marshal einsatz object:", err)
 			continue
 		}
 
 		einsatz, err := parseEinsatz(einsatzBytes)
 		if err != nil {
-			fmt.Println("Failed to parse einsatz object:", err)
+			log.Println("Failed to parse einsatz object:", err)
 			continue
 		}
 
@@ -148,10 +148,11 @@ func parseEinsaetze() []Einsatz {
 
 		einsatzJson, err := json.Marshal(einsatz)
 		if err != nil {
-			fmt.Println("Failed to marshal einsatz object:", err)
+			log.Println("Failed to marshal einsatz object:", err)
 			continue
 		}
-		fmt.Println(string(einsatzJson))
+
+		log.Println("Parsed Einsatz:", string(einsatzJson))
 	}
 
 	return einsaetze
