@@ -2,6 +2,9 @@ name: Build and push Docker image
 
 on: push
 
+permissions:
+  packages: write
+
 jobs:
   build:
     name: Build with go
