@@ -28,7 +28,6 @@ func main() {
 
 	firebaseConfig := GetConfig()
 
-	// Open our jsonFile
 	ao := map[string]interface{}{"token": firebaseConfig.Token}
 	conf := &firebase.Config{
 		DatabaseURL:  firebaseConfig.Url,
