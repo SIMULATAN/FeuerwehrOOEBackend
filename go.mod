@@ -5,6 +5,7 @@ go 1.20
 require (
 	firebase.google.com/go/v4 v4.10.0
 	google.golang.org/api v0.114.0
+	github.com/go-chi/chi/v5 v5.0.8
 )
 
 require (

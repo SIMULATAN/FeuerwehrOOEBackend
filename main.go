@@ -51,6 +51,8 @@ func main() {
 	historyRef := dbClient.NewRef("/einsatz/history")
 	notificationRef := dbClient.NewRef("/einsatz/notification")
 
+	go startServer()
+
 	runFetchThread(historyRef, notificationRef)
 }
 

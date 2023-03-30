@@ -6,13 +6,13 @@ import (
 	"log"
 )
 
-var client *messaging.Client
+var messagingClient *messaging.Client
 
 func InitializeMessaging() {
 	ctx := context.Background()
 
 	var err error
-	client, err = app.Messaging(ctx)
+	messagingClient, err = app.Messaging(ctx)
 	if err != nil {
 		log.Fatalf("Error getting messaging client: %v\n", err)
 	}
@@ -37,7 +37,7 @@ func SendNotification(einsatz Einsatz) {
 		},
 	}
 
-	response, err := client.Send(context.Background(), message)
+	response, err := messagingClient.Send(context.Background(), message)
 	if err != nil {
 		log.Println("Error sending message:", err)
 	}
