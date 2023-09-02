@@ -1,9 +1,10 @@
-package main
+package database
 
 import (
 	"encoding/json"
+	"firebase.google.com/go/v4/db"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 )
@@ -22,7 +23,7 @@ func GetConfig() FirebaseConfig {
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer jsonFile.Close()
 
-	bytes, _ := ioutil.ReadAll(jsonFile)
+	bytes, _ := io.ReadAll(jsonFile)
 
 	var firebaseConfig FirebaseConfig
 
@@ -41,3 +42,6 @@ func GetConfig() FirebaseConfig {
 
 	return firebaseConfig
 }
+
+var notificationRef *db.Ref
+var historyRef *db.Ref

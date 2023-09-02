@@ -4,8 +4,8 @@ go 1.20
 
 require (
 	firebase.google.com/go/v4 v4.10.0
-	google.golang.org/api v0.114.0
 	github.com/go-chi/chi/v5 v5.0.8
+	google.golang.org/api v0.114.0
 )
 
 require (
@@ -17,6 +17,7 @@ require (
 	cloud.google.com/go/longrunning v0.4.1 // indirect
 	cloud.google.com/go/storage v1.30.1 // indirect
 	github.com/MicahParks/keyfunc v1.5.1 // indirect
+	github.com/OneSignal/onesignal-go-api v1.0.4 // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
@@ -24,6 +25,7 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.2.3 // indirect
 	github.com/googleapis/gax-go/v2 v2.8.0 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/oauth2 v0.6.0 // indirect
