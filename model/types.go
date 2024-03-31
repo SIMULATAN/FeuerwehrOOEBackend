@@ -6,16 +6,15 @@ import (
 )
 
 type Einsatz struct {
-	ID          string      `json:"num1"`
-	Einsatzort  string      `json:"einsatzort"`
-	Koordinaten Koordinaten `json:"wgs84"`
-	Alarmstufe  json.Number `json:"alarmstufe"`
-	Startzeit   MyTime      `json:"startzeit"`
-	Einsatzname string      `json:"einsatzname"`
-	Einsatzart  string      `json:"einsatzart"`
-	Einsatztyp  Einsatztyp  `json:"einsatzsubtyp"`
-	Adresse     Adresse     `json:"adresse"`
-	Feuerwehren Feuerwehren `json:"feuerwehren"`
+	ID          string       `json:"num1"`
+	Einsatzort  string       `json:"einsatzort"`
+	Koordinaten Koordinaten  `json:"wgs84"`
+	Alarmstufe  json.Number  `json:"alarmstufe"`
+	Startzeit   MyTime       `json:"startzeit"`
+	Einsatztyp  Einsatztyp   `json:"einsatztyp"`
+	Einsatzsubtyp Einsatztyp `json:"einsatzsubtyp"`
+	Adresse     Adresse      `json:"adresse"`
+	Feuerwehren Feuerwehren  `json:"feuerwehren"`
 }
 
 type Feuerwehren []Feuerwehr
@@ -40,8 +39,8 @@ func (f *Feuerwehren) UnmarshalJSON(data []byte) error {
 }
 
 type Koordinaten struct {
-	Latitude  float64 `json:"lat"`
-	Longitude float64 `json:"lng"`
+	Latitude  string `json:"lat"`
+	Longitude string `json:"lng"`
 }
 
 type Einsatztyp struct {

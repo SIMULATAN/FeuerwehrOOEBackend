@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const LaufendUrl string = "https://cf-intranet.ooelfv.at/webext2/rss/json_laufend.txt"
+const LaufendUrl string = "https://cf-einsaetze.ooelfv.at/webext2/rss/json_laufend.txt"
 
 func (t *MyTime) UnmarshalJSON(data []byte) error {
 	dateStr, err := strconv.Unquote(string(data))
