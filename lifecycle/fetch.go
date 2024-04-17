@@ -39,6 +39,10 @@ func runFetch() {
 
 	database.UpdateHistory(historyMap)
 
+	sendNotifications(einsaetze)
+}
+
+func sendNotifications(einsaetze []model.Einsatz) {
 	sentNotifications := make(map[string]any)
 
 	notificationsToSend := database.GetNotificationsToSend(einsaetze)

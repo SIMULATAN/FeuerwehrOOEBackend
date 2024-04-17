@@ -6,15 +6,17 @@ import (
 )
 
 type Einsatz struct {
-	ID          string       `json:"num1"`
-	Einsatzort  string       `json:"einsatzort"`
-	Koordinaten Koordinaten  `json:"wgs84"`
-	Alarmstufe  json.Number  `json:"alarmstufe"`
-	Startzeit   MyTime       `json:"startzeit"`
-	Einsatztyp  Einsatztyp   `json:"einsatztyp"`
-	Einsatzsubtyp Einsatztyp `json:"einsatzsubtyp"`
-	Adresse     Adresse      `json:"adresse"`
-	Feuerwehren Feuerwehren  `json:"feuerwehren"`
+	ID          string         `json:"num1"`
+	Einsatzort  string         `json:"einsatzort"`
+	Status      string         `json:"status"`
+	Koordinaten Koordinaten    `json:"wgs84"`
+	Alarmstufe  json.Number    `json:"alarmstufe"`
+	Startzeit   MyTime         `json:"startzeit"`
+	Endzeit     MyNullableTime `json:"inzeit",omitempty`
+	Einsatztyp  Einsatztyp     `json:"einsatztyp"`
+	Einsatzsubtyp Einsatztyp   `json:"einsatzsubtyp"`
+	Adresse     Adresse        `json:"adresse"`
+	Feuerwehren Feuerwehren    `json:"feuerwehren"`
 }
 
 type Feuerwehren []Feuerwehr
@@ -66,4 +68,8 @@ type Feuerwehr struct {
 
 type MyTime struct {
 	time.Time
+}
+
+type MyNullableTime struct {
+	*time.Time
 }

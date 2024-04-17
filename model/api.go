@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const LaufendUrl string = "https://cf-einsaetze.ooelfv.at/webext2/rss/json_laufend.txt"
+const LaufendUrl string = "https://cf-einsaetze.ooelfv.at/webext2/rss/json_taeglich.txt"
 
 func (t *MyTime) UnmarshalJSON(data []byte) error {
 	dateStr, err := strconv.Unquote(string(data))
@@ -24,6 +24,33 @@ func (t *MyTime) UnmarshalJSON(data []byte) error {
 
 	t.Time = date
 	return nil
+}
+
+func (t *MyNullableTime) UnmarshalJSON(data []byte) error {
+	dateStr, err := strconv.Unquote(string(data))
+	if err != nil {
+		return err
+	}
+	// ongoing Einsatz
+	if (len(dateStr) == 0) {
+		t.Time = nil
+		return nil
+	}
+
+	date, err := time.Parse(time.RFC1123Z, dateStr)
+	if err != nil {
+		return err
+	}
+
+	t.Time = &date
+	return nil
+}
+
+func (s MyNullableTime) MarshalJSON() ([]byte, error) {
+	if s.Time != nil {
+		return json.Marshal(s.Time)
+	}
+	return []byte(`null`), nil
 }
 
 func parseEinsatz(jsonString []byte) (Einsatz, error) {
